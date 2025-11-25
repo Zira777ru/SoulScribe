@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SoulScribe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Merriweather', 'serif'],
+            },
+            colors: {
+              stone: {
+                50: '#fafaf9',
+                100: '#f5f5f4',
+                800: '#292524',
+                900: '#1c1917',
+              },
+              gold: {
+                500: '#d4af37',
+                600: '#b4942b',
+              },
+              // New Warm Palette
+              cream: {
+                50: '#fdfbf7', // Base Paper
+                100: '#f7f4ec',
+                200: '#ece6d8',
+                900: '#3d3832', // Deep Brown/Black
+              },
+              ink: {
+                900: '#443c32', // Headings
+                700: '#5c554b', // Body Text
+                500: '#8c8479', // Muted Text
+              }
+            },
+            animation: {
+              'fade-in': 'fadeIn 1s ease-out forwards',
+              'fade-in-up': 'fadeInUp 1s ease-out forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #fdfbf7; /* cream-50 */
+      }
+      
+      /* Paper Texture Overlay */
+      .bg-paper {
+        position: relative;
+      }
+      .bg-paper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+        pointer-events: none;
+        border-radius: inherit;
+        mix-blend-mode: multiply;
+      }
+      .bg-paper > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Drop Cap (First Letter) */
+      .drop-cap::first-letter {
+        float: left;
+        font-size: 4.2rem;
+        line-height: 0.75;
+        padding-right: 0.75rem;
+        padding-top: 0.2rem;
+        font-family: 'Merriweather', serif;
+        color: #b4942b; /* gold-600 */
+        font-weight: 700;
+      }
+
+      /* Slow Text Reveal Animation */
+      .reveal-text {
+        opacity: 0;
+        animation: textReveal 2.5s ease-out forwards;
+      }
+
+      @keyframes textReveal {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
