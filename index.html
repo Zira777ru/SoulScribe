@@ -24,6 +24,8 @@
                 900: '#1c1917',
               },
               gold: {
+                300: '#fcd34d',
+                400: '#fbbf24',
                 500: '#d4af37',
                 600: '#b4942b',
               },
@@ -103,6 +105,21 @@
       @keyframes textReveal {
         from { opacity: 0; transform: translateY(8px); }
         to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Hide Scrollbar but keep functionality */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+
+      /* Mask for fading edges of scrollable areas */
+      .mask-linear-fade {
+        mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
       }
     </style>
   <script type="importmap">

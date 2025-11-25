@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { generatePrayer } from './services/geminiService';
 import { savePrayerToHistory, getPrayersFromHistory, deletePrayerFromHistory, updatePrayerInHistory } from './services/storageService';
@@ -238,7 +237,9 @@ const Button = ({ onClick, disabled, children, variant = 'primary', className = 
     primary: "bg-ink-900 text-cream-50 hover:bg-stone-800 shadow-md",
     secondary: "bg-cream-50/60 backdrop-blur-sm text-ink-900 border border-cream-200/50 hover:bg-cream-50 hover:border-cream-200",
     outline: "border border-ink-500/30 text-ink-700 hover:text-ink-900 hover:border-ink-500",
-    ghost: "text-ink-500 hover:text-ink-900 hover:bg-cream-100/50 shadow-none px-4 py-2"
+    ghost: "text-ink-500 hover:text-ink-900 hover:bg-cream-100/50 shadow-none px-4 py-2",
+    // Updated magic variant: Brighter Gold/Amber gradient for "Light" feel
+    magic: "bg-gradient-to-br from-gold-400 via-amber-400 to-amber-600 text-ink-900 shadow-[0_4px_25px_rgba(251,191,36,0.5)] hover:shadow-[0_8px_35px_rgba(251,191,36,0.7)] border border-white/40 hover:scale-[1.02]"
   };
   // @ts-ignore
   return <button onClick={onClick} disabled={disabled} className={`${baseStyle} ${variants[variant]} ${className}`}>{children}</button>;
@@ -246,13 +247,14 @@ const Button = ({ onClick, disabled, children, variant = 'primary', className = 
 
 const Background = ({ mood }: { mood: Mood }) => {
   return (
-    <div className="fixed inset-0 z-0 transition-all duration-[2000ms] ease-in-out">
+    <div className="fixed inset-0 -z-10 pointer-events-none transition-all duration-[2000ms] ease-in-out">
       {/* Calm/Anxious Background (Foggy/Twilight) */}
       <div 
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${mood === 'calm' ? 'opacity-100' : 'opacity-0'}`}
         style={{ backgroundImage: `url('https://images.unsplash.com/photo-1485230905346-71acb9518d9c?q=80&w=2094&auto=format&fit=crop')` }}
       >
-        <div className="absolute inset-0 bg-stone-500/30 backdrop-blur-[4px]"></div>
+        {/* Lighter overlay to let image show through */}
+        <div className="absolute inset-0 bg-stone-300/20 backdrop-blur-[2px]"></div>
       </div>
 
       {/* Hopeful Background (Dawn/Light) */}
@@ -260,7 +262,8 @@ const Background = ({ mood }: { mood: Mood }) => {
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${mood === 'hopeful' ? 'opacity-100' : 'opacity-0'}`}
         style={{ backgroundImage: `url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=2070&auto=format&fit=crop')` }}
       >
-        <div className="absolute inset-0 bg-amber-100/30 backdrop-blur-[3px]"></div>
+        {/* Warm light overlay */}
+        <div className="absolute inset-0 bg-amber-50/20 backdrop-blur-[1px]"></div>
       </div>
     </div>
   );
@@ -453,7 +456,7 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 relative z-10">
-      <div className="w-full max-w-md bg-cream-50/80 bg-paper backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl text-center border border-white/40">
+      <div className="w-full max-w-md bg-white/40 bg-paper backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl text-center border border-white/50">
         <div className="flex justify-center mb-8">
           <div className="p-5 bg-cream-100/80 rounded-full shadow-inner ring-1 ring-cream-200">
             <QuillIcon className="w-10 h-10 text-gold-600" />
@@ -466,7 +469,7 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
           <button 
             onClick={handleLogin}
             disabled={loading}
-            className="w-full bg-white/60 border border-white/50 text-ink-700 font-medium py-4 px-6 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/80 hover:shadow-lg transition-all shadow-sm"
+            className="w-full bg-white/70 border border-white/60 text-ink-700 font-medium py-4 px-6 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/90 hover:shadow-lg transition-all shadow-sm"
           >
             {loading ? (
               <span className="animate-pulse text-ink-500">Connecting...</span>
@@ -613,36 +616,36 @@ const GeneratorScreen = ({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h2 
-          className="text-xl font-serif font-bold text-white/90 flex items-center gap-2 drop-shadow-md cursor-pointer"
+          className="text-xl font-serif font-bold text-white/90 flex items-center gap-2 drop-shadow-md cursor-pointer hover:text-white transition-colors"
           onClick={() => { setResult(null); setUserInput(''); setInitialMood(null); }}
         >
-          <QuillIcon className="w-6 h-6 text-gold-500" />
+          <QuillIcon className="w-6 h-6 text-gold-400 drop-shadow-sm" />
           SoulScribe
         </h2>
         <div className="flex gap-3">
-          <div className="bg-cream-50/20 backdrop-blur-md rounded-xl p-1 border border-white/20 flex shadow-sm">
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-1 border border-white/20 flex shadow-sm">
             <button 
               onClick={() => setLanguage('ru')}
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${language === 'ru' ? 'bg-cream-50/90 text-ink-900 shadow-sm' : 'text-cream-50/80 hover:text-white'}`}
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${language === 'ru' ? 'bg-white/90 text-ink-900 shadow-sm' : 'text-white/80 hover:text-white'}`}
             >
               RU
             </button>
             <button 
               onClick={() => setLanguage('en')}
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${language === 'en' ? 'bg-cream-50/90 text-ink-900 shadow-sm' : 'text-cream-50/80 hover:text-white'}`}
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${language === 'en' ? 'bg-white/90 text-ink-900 shadow-sm' : 'text-white/80 hover:text-white'}`}
             >
               EN
             </button>
           </div>
           <button 
              onClick={() => setSettingsOpen(true)}
-             className="bg-cream-50/20 backdrop-blur-md text-white border border-white/20 hover:bg-cream-50/30 p-2 rounded-xl transition-colors"
+             className="bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 p-2 rounded-xl transition-colors"
           >
             <GearIcon className="w-6 h-6" />
           </button>
           <button 
              onClick={() => onNavigate('diary')}
-             className="bg-cream-50/20 backdrop-blur-md text-white border border-white/20 hover:bg-cream-50/30 p-2 rounded-xl transition-colors"
+             className="bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 p-2 rounded-xl transition-colors"
           >
             <BookIcon className="w-6 h-6" />
           </button>
@@ -662,10 +665,10 @@ const GeneratorScreen = ({
                     <button
                         key={m.id}
                         onClick={() => setInitialMood(m.id)}
-                        className={`flex flex-col items-center gap-2 group transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-60 hover:opacity-100 hover:scale-105'}`}
+                        className={`flex flex-col items-center gap-2 group transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-70 hover:opacity-100 hover:scale-105'}`}
                         title={language === 'ru' ? m.ru : m.label}
                     >
-                        <div className={`p-3 rounded-2xl transition-all ${isActive ? 'bg-cream-50 shadow-lg ' + m.color : 'bg-white/10 text-white'}`}>
+                        <div className={`p-3 rounded-2xl transition-all ${isActive ? 'bg-white/90 shadow-lg ' + m.color : 'bg-white/20 text-white backdrop-blur-sm'}`}>
                             <Icon className="w-6 h-6" />
                         </div>
                     </button>
@@ -675,14 +678,15 @@ const GeneratorScreen = ({
 
           <div className="relative group">
             {/* Input Background Glow */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-cream-200 to-white rounded-[2rem] blur opacity-10 group-hover:opacity-30 transition duration-1000"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-white/30 to-white/10 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
             
-            <div className="relative w-full rounded-[2rem] bg-cream-50/60 bg-paper backdrop-blur-xl shadow-xl overflow-hidden flex flex-col min-h-[340px] transition-all">
+            {/* Main Card: Increased transparency for 'frosted' look */}
+            <div className="relative w-full rounded-[2rem] bg-white/40 bg-paper backdrop-blur-xl shadow-xl overflow-hidden flex flex-col min-h-[340px] transition-all border border-white/40">
                 <textarea
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder={language === 'ru' ? "О чем болит ваше сердце сегодня? (Напишите своими словами...)" : "What is weighing on your heart today? (Write in your own words...)"}
-                className="w-full flex-grow p-8 border-0 bg-transparent resize-none outline-none font-serif text-xl text-ink-700 leading-relaxed placeholder-ink-500/40"
+                className="w-full flex-grow p-8 border-0 bg-transparent resize-none outline-none font-serif text-xl text-ink-700 leading-relaxed placeholder-ink-500/50"
                 />
                 
                 {/* Smart Chips (Prompt Starters) - Scrollable Tag Cloud */}
@@ -692,7 +696,7 @@ const GeneratorScreen = ({
                       <button
                         key={topic.id}
                         onClick={() => setUserInput(topic.text[language])}
-                        className="flex-shrink-0 bg-white/40 hover:bg-cream-100 border border-cream-200/50 rounded-xl px-3 py-2 text-sm font-medium text-ink-700 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+                        className="flex-shrink-0 bg-white/50 hover:bg-white/80 border border-white/40 rounded-xl px-3 py-2 text-sm font-medium text-ink-700 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 whitespace-nowrap shadow-sm backdrop-blur-sm"
                       >
                         <span className="text-lg">{topic.emoji}</span>
                         {topic.label[language]}
@@ -714,7 +718,7 @@ const GeneratorScreen = ({
                         className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
                             prayerStyle === item.id 
                             ? 'bg-ink-900 text-cream-50 shadow-sm' 
-                            : 'bg-cream-100/50 text-ink-500 hover:bg-cream-200/50'
+                            : 'bg-white/40 text-ink-500 hover:bg-white/70 hover:text-ink-700'
                         }`}
                       >
                          {item.label}
@@ -725,7 +729,7 @@ const GeneratorScreen = ({
                 {userInput.length > 0 && (
                 <button 
                     onClick={() => setUserInput('')}
-                    className="absolute top-6 right-6 text-ink-500 hover:text-ink-900 transition-colors p-2"
+                    className="absolute top-6 right-6 text-ink-400 hover:text-ink-900 transition-colors p-2"
                 >
                     <TrashIcon className="w-5 h-5" />
                 </button>
@@ -734,13 +738,14 @@ const GeneratorScreen = ({
           </div>
 
           <Button 
+            variant="magic"
             onClick={handleGenerate} 
             disabled={loading || !userInput.trim()} 
-            className="w-full text-lg shadow-lg py-4 bg-ink-900 hover:bg-black text-cream-50 rounded-2xl"
+            className="w-full text-lg py-4 rounded-2xl font-bold tracking-wide"
           >
             {loading ? (
                <span className="flex items-center gap-3">
-                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                 <div className="w-5 h-5 border-2 border-ink-900/30 border-t-ink-900 rounded-full animate-spin"></div>
                  {language === 'ru' ? "Слушаем сердце..." : "Listening..."}
                </span>
             ) : (
@@ -766,13 +771,13 @@ const GeneratorScreen = ({
              </button>
            </div>
 
-          <div className="bg-cream-50/85 bg-paper backdrop-blur-xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/30">
+          <div className="bg-white/60 bg-paper backdrop-blur-2xl rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/50">
             {/* Title */}
             <div className="px-8 pt-12 pb-6 text-center">
               {/* Reduced font weight and size to not compete with drop cap */}
               <h3 className="text-2xl md:text-3xl font-serif font-semibold text-ink-900 tracking-tight leading-tight">{result.title}</h3>
               {/* More subtle divider */}
-              <div className="h-px w-16 bg-gold-500/40 mx-auto mt-6"></div>
+              <div className="h-px w-16 bg-gold-400/50 mx-auto mt-6"></div>
             </div>
             
             {/* Prayer Text */}
@@ -794,8 +799,8 @@ const GeneratorScreen = ({
             </div>
 
             {/* Bible Verse */}
-            <div className="mx-6 md:mx-12 mb-10 mt-8 bg-cream-100/50 rounded-2xl p-8 border border-cream-200/50 relative overflow-hidden group">
-               <div className="absolute top-0 left-0 w-1 h-full bg-gold-500/30"></div>
+            <div className="mx-6 md:mx-12 mb-10 mt-8 bg-cream-50/50 rounded-2xl p-8 border border-white/60 relative overflow-hidden group">
+               <div className="absolute top-0 left-0 w-1 h-full bg-gold-400/40"></div>
                <div className="relative z-10">
                 <p className="text-ink-700 font-serif italic text-lg md:text-xl leading-relaxed text-center mb-5">
                   "{result.verse}"
@@ -844,7 +849,7 @@ const GeneratorScreen = ({
             </div>
 
             {/* Actions */}
-            <div className="p-6 bg-cream-100/40 border-t border-cream-200/50 flex flex-col md:flex-row items-center justify-center gap-4 pb-8">
+            <div className="p-6 bg-cream-50/40 border-t border-white/50 flex flex-col md:flex-row items-center justify-center gap-4 pb-8">
               <Button 
                 onClick={handleSave}
                 disabled={saved}
@@ -954,23 +959,23 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 relative z-10 min-h-screen">
       <div className="flex items-center gap-4 mb-8">
-        <Button variant="secondary" onClick={() => onNavigate('generator')} className="!rounded-full w-12 h-12 !p-0 bg-cream-50/20 text-cream-50 border-white/20 hover:bg-cream-50/40 hover:border-white/40">
+        <Button variant="secondary" onClick={() => onNavigate('generator')} className="!rounded-full w-12 h-12 !p-0 bg-white/20 text-white border-white/20 hover:bg-white/30 hover:border-white/40">
           <ArrowLeftIcon className="w-5 h-5" />
         </Button>
-        <h2 className="text-3xl font-serif font-bold text-cream-50 drop-shadow-md">Prayer Journal</h2>
+        <h2 className="text-3xl font-serif font-bold text-white drop-shadow-md">Prayer Journal</h2>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-8 bg-black/20 p-1 rounded-xl backdrop-blur-md w-fit mx-auto md:mx-0 border border-white/10">
         <button
           onClick={() => setActiveTab('requests')}
-          className={`px-6 py-2 rounded-lg font-medium transition-all ${activeTab === 'requests' ? 'bg-cream-50/90 text-ink-900 shadow-md' : 'text-cream-50/80 hover:bg-white/10'}`}
+          className={`px-6 py-2 rounded-lg font-medium transition-all ${activeTab === 'requests' ? 'bg-white/90 text-ink-900 shadow-md' : 'text-white/80 hover:bg-white/10'}`}
         >
           Requests ({activePrayers.length})
         </button>
         <button
           onClick={() => setActiveTab('gratitude')}
-          className={`px-6 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${activeTab === 'gratitude' ? 'bg-cream-50/90 text-ink-900 shadow-md' : 'text-cream-50/80 hover:bg-white/10'}`}
+          className={`px-6 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${activeTab === 'gratitude' ? 'bg-white/90 text-ink-900 shadow-md' : 'text-white/80 hover:bg-white/10'}`}
         >
           <SunIcon className="w-4 h-4" />
           Gratitude ({answeredPrayers.length})
@@ -982,17 +987,17 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
           <div className="animate-spin rounded-full h-10 w-10 border-4 border-white/20 border-t-white"></div>
         </div>
       ) : displayList.length === 0 ? (
-        <div className="text-center py-24 bg-cream-50/80 bg-paper backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-white/30 mx-4">
-          <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${activeTab === 'gratitude' ? 'bg-amber-100 text-amber-500' : 'bg-cream-100 text-ink-500'}`}>
+        <div className="text-center py-24 bg-white/40 bg-paper backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-white/30 mx-4">
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${activeTab === 'gratitude' ? 'bg-amber-100 text-amber-500' : 'bg-white/50 text-ink-500'}`}>
              {activeTab === 'gratitude' ? <SunIcon className="w-8 h-8"/> : <BookIcon className="w-8 h-8"/>}
           </div>
-          <p className="text-ink-500 font-medium text-lg mb-6">
+          <p className="text-ink-600 font-medium text-lg mb-6">
             {activeTab === 'gratitude' ? "No answered prayers yet. Keep believing." : "Your journal is currently empty."}
           </p>
           {activeTab === 'requests' && (
             <button 
                 onClick={() => onNavigate('generator')}
-                className="text-ink-900 font-semibold hover:text-ink-700 border-b-2 border-cream-200 hover:border-ink-900 transition-all pb-1"
+                className="text-ink-900 font-semibold hover:text-ink-700 border-b-2 border-white/50 hover:border-ink-900 transition-all pb-1"
             >
                 Start your first prayer
             </button>
@@ -1005,7 +1010,7 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
               key={prayer.id} 
               onClick={() => toggleExpand(prayer.id)}
               className={`
-                bg-cream-50/85 bg-paper backdrop-blur-md rounded-[2rem] shadow-lg border border-white/40 overflow-hidden transition-all duration-300 cursor-pointer hover:shadow-xl hover:scale-[1.01] hover:bg-cream-50/95
+                bg-white/60 bg-paper backdrop-blur-xl rounded-[2rem] shadow-lg border border-white/50 overflow-hidden transition-all duration-300 cursor-pointer hover:shadow-xl hover:scale-[1.01] hover:bg-white/80
                 ${expandedId === prayer.id ? 'ring-2 ring-ink-900/10' : ''}
                 ${activeTab === 'gratitude' ? 'border-l-4 border-l-amber-400' : ''}
               `}
@@ -1014,7 +1019,7 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                       <span className="text-xs font-bold text-ink-500 uppercase tracking-wider bg-cream-100/80 px-2 py-1 rounded-md">
+                       <span className="text-xs font-bold text-ink-500 uppercase tracking-wider bg-white/50 px-2 py-1 rounded-md">
                          {new Date(prayer.timestamp).toLocaleDateString()}
                        </span>
                        {activeTab === 'gratitude' && prayer.answerDate && (
@@ -1023,7 +1028,7 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
                          </span>
                        )}
                        {/* Style badges */}
-                       <span className="text-xs font-bold text-ink-500 uppercase tracking-wider bg-cream-100/80 px-2 py-1 rounded-md">
+                       <span className="text-xs font-bold text-ink-500 uppercase tracking-wider bg-white/50 px-2 py-1 rounded-md">
                          {prayer.style}
                        </span>
                     </div>
@@ -1038,7 +1043,7 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
                 </div>
                 
                 {!expandedId && (
-                  <p className="text-ink-500 line-clamp-2 font-serif text-lg leading-relaxed">
+                  <p className="text-ink-600 line-clamp-2 font-serif text-lg leading-relaxed">
                     {prayer.prayer}
                   </p>
                 )}
@@ -1050,12 +1055,12 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
                        {prayer.prayer}
                      </p>
                      
-                     <div className="bg-cream-100/50 p-6 rounded-2xl border border-cream-200/50 mb-6">
+                     <div className="bg-cream-50/50 p-6 rounded-2xl border border-white/60 mb-6">
                         <p className="text-ink-700 italic font-serif text-lg mb-2 text-center">"{prayer.verse}"</p>
                         <p className="text-ink-500 text-xs font-bold text-center uppercase tracking-widest">— {prayer.reference}</p>
                      </div>
 
-                     <div className="pt-4 border-t border-cream-200/50">
+                     <div className="pt-4 border-t border-white/40">
                         <p className="text-xs text-ink-500 font-bold uppercase tracking-widest mb-1">Original Thought</p>
                         <p className="text-ink-500 italic font-serif mb-6">"{prayer.userInput}"</p>
                      </div>
@@ -1089,7 +1094,7 @@ const DiaryScreen = ({ onNavigate, setMood }: { onNavigate: (screen: Screen) => 
 
                      {/* Answering Form */}
                      {answeringId === prayer.id && (
-                        <div className="mt-6 bg-cream-50 border border-cream-200 rounded-2xl p-6 shadow-sm animate-fade-in" onClick={e => e.stopPropagation()}>
+                        <div className="mt-6 bg-white/80 border border-white rounded-2xl p-6 shadow-sm animate-fade-in" onClick={e => e.stopPropagation()}>
                             <h4 className="text-lg font-serif font-bold text-ink-900 mb-2">
                                 {prayer.language === 'ru' ? 'Слава Богу! Расскажите, как это произошло:' : 'Praise God! Tell us how it happened:'}
                             </h4>
