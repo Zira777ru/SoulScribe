@@ -61,8 +61,12 @@
       }
     </script>
     <style>
-      body {
-        background-color: #fdfbf7; /* cream-50 */
+      /* CRITICAL FIX: Ensure body is transparent so fixed background (-z-10) is visible */
+      html, body {
+        background-color: transparent !important;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
       }
       
       /* Paper Texture Overlay */

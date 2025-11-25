@@ -247,7 +247,8 @@ const Button = ({ onClick, disabled, children, variant = 'primary', className = 
 
 const Background = ({ mood }: { mood: Mood }) => {
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none transition-all duration-[2000ms] ease-in-out">
+    // FIX: Use -z-10 to put behind content, and use gradient as fallback if image fails
+    <div className="fixed inset-0 -z-10 pointer-events-none transition-all duration-[2000ms] ease-in-out bg-gradient-to-b from-stone-200 to-cream-100">
       {/* Calm/Anxious Background (Foggy/Twilight) */}
       <div 
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${mood === 'calm' ? 'opacity-100' : 'opacity-0'}`}
