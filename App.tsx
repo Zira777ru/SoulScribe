@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { generatePrayer } from './services/geminiService';
 import { savePrayerToHistory, getPrayersFromHistory, deletePrayerFromHistory, updatePrayerInHistory } from './services/storageService';
 import { Language, PrayerEntry, PrayerResponse, Screen, User, PrayerStyle, Denomination, SocialTemplate } from './types';
-import { BookIcon, GoogleIcon, HeartIcon, ArrowLeftIcon, PenIcon, TrashIcon, CheckIcon, SunIcon, ShareIcon, DownloadIcon, InstagramIcon, TelegramIcon, WhatsAppIcon, GearIcon, WindIcon, RainIcon, LightningIcon, MoonIcon, SpiralIcon, PrayingHandsIcon } from './components/Icons';
+import { BookIcon, GoogleIcon, HeartIcon, ArrowLeftIcon, PenIcon, QuillIcon, TrashIcon, CheckIcon, SunIcon, ShareIcon, DownloadIcon, InstagramIcon, TelegramIcon, WhatsAppIcon, GearIcon, WindIcon, RainIcon, LightningIcon, MoonIcon, SpiralIcon, PrayingHandsIcon } from './components/Icons';
 
 // --- Types for Mood ---
 type Mood = 'calm' | 'hopeful';
@@ -22,6 +22,54 @@ const TEMPLATES = [
   { id: 'minimal', label: 'Minimal', color: 'bg-stone-100' },
   { id: 'atmospheric', label: 'Atmosphere', color: 'bg-indigo-900' },
   { id: 'classic', label: 'Classic', color: 'bg-amber-100' },
+];
+
+const QUICK_TOPICS = [
+  { 
+    id: 'health', 
+    emoji: '💊', 
+    label: { en: 'Health', ru: 'Здоровье' },
+    text: { 
+      en: "Lord, I ask for Your healing and protection for my loved ones. Grant us health and strength...", 
+      ru: "Господи, прошу Твоего исцеления и защиты для моих близких. Даруй нам здоровье и силы..." 
+    }
+  },
+  { 
+    id: 'work', 
+    emoji: '💼', 
+    label: { en: 'Work', ru: 'Работа' },
+    text: { 
+      en: "Lord, times are tough at work, and I fear I cannot cope. Give me wisdom and patience...", 
+      ru: "Господи, на работе сложные времена, я боюсь не справиться. Дай мне мудрости и терпения..." 
+    }
+  },
+  { 
+    id: 'burnout', 
+    emoji: '🔋', 
+    label: { en: 'Burnout', ru: 'Выгорание' },
+    text: { 
+      en: "Lord, I feel my strength failing, and I find no joy in my work. Renew my spirit and give me rest...", 
+      ru: "Господи, я чувствую, что мои силы на исходе, работа не приносит радости. Обнови дух мой и дай мне покой..." 
+    }
+  },
+  { 
+    id: 'loneliness', 
+    emoji: '🌑', 
+    label: { en: 'Loneliness', ru: 'Одиночество' },
+    text: { 
+      en: "Lord, I feel so lonely and empty inside. Be near me and remind me of Your love...", 
+      ru: "Господи, мне так одиноко и пусто на душе. Будь рядом со мной и напомни о Твоей любви..." 
+    }
+  },
+  { 
+    id: 'family', 
+    emoji: '🏠', 
+    label: { en: 'Family', ru: 'Семья' },
+    text: { 
+      en: "Lord, there is discord in my family. Help us restore peace, understanding, and love...", 
+      ru: "Господи, в моей семье разлад. Помоги нам вернуть мир, понимание и любовь..." 
+    }
+  },
 ];
 
 // --- Utility: Text Wrapping for Canvas ---
@@ -408,7 +456,7 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
       <div className="w-full max-w-md bg-cream-50/80 bg-paper backdrop-blur-xl p-10 rounded-[2.5rem] shadow-2xl text-center border border-white/40">
         <div className="flex justify-center mb-8">
           <div className="p-5 bg-cream-100/80 rounded-full shadow-inner ring-1 ring-cream-200">
-            <PenIcon className="w-10 h-10 text-ink-700" />
+            <QuillIcon className="w-10 h-10 text-gold-600" />
           </div>
         </div>
         <h1 className="text-5xl font-serif font-bold text-ink-900 mb-4 tracking-tight">SoulScribe</h1>
@@ -568,7 +616,7 @@ const GeneratorScreen = ({
           className="text-xl font-serif font-bold text-white/90 flex items-center gap-2 drop-shadow-md cursor-pointer"
           onClick={() => { setResult(null); setUserInput(''); setInitialMood(null); }}
         >
-          <PenIcon className="w-5 h-5 opacity-80" />
+          <QuillIcon className="w-6 h-6 text-gold-500" />
           SoulScribe
         </h2>
         <div className="flex gap-3">
@@ -637,8 +685,24 @@ const GeneratorScreen = ({
                 className="w-full flex-grow p-8 border-0 bg-transparent resize-none outline-none font-serif text-xl text-ink-700 leading-relaxed placeholder-ink-500/40"
                 />
                 
+                {/* Smart Chips (Prompt Starters) - Scrollable Tag Cloud */}
+                <div className="px-8 pb-4">
+                  <div className="flex gap-2 overflow-x-auto no-scrollbar py-2 mask-linear-fade">
+                    {QUICK_TOPICS.map((topic) => (
+                      <button
+                        key={topic.id}
+                        onClick={() => setUserInput(topic.text[language])}
+                        className="flex-shrink-0 bg-white/40 hover:bg-cream-100 border border-cream-200/50 rounded-xl px-3 py-2 text-sm font-medium text-ink-700 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+                      >
+                        <span className="text-lg">{topic.emoji}</span>
+                        {topic.label[language]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Embedded Style Selector (Chips) */}
-                <div className="px-8 pb-6 flex flex-wrap gap-2">
+                <div className="px-8 pb-6 flex flex-wrap gap-2 border-t border-ink-900/5 pt-4">
                      {[
                       { id: 'classic', label: language === 'ru' ? 'Традиционный' : 'Classic' },
                       { id: 'modern', label: language === 'ru' ? 'Современный' : 'Modern' },
