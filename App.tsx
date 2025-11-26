@@ -247,24 +247,21 @@ const Button = ({ onClick, disabled, children, variant = 'primary', className = 
 
 const Background = ({ mood }: { mood: Mood }) => {
   return (
-    // FIX: Use -z-10 to put behind content, and use gradient as fallback if image fails
-    <div className="fixed inset-0 -z-10 pointer-events-none transition-all duration-[2000ms] ease-in-out bg-gradient-to-b from-stone-200 to-cream-100">
-      {/* Calm/Anxious Background (Foggy/Twilight) */}
+    <div className="fixed inset-0 -z-10 pointer-events-none">
+      {/* Calm/Anxious Background (Cool/Misty) */}
       <div 
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${mood === 'calm' ? 'opacity-100' : 'opacity-0'}`}
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1485230905346-71acb9518d9c?q=80&w=2094&auto=format&fit=crop')` }}
+        className={`absolute inset-0 transition-opacity duration-[2000ms] ${mood === 'calm' ? 'opacity-100' : 'opacity-0'}`}
       >
-        {/* Lighter overlay to let image show through */}
-        <div className="absolute inset-0 bg-stone-300/20 backdrop-blur-[2px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-300 via-stone-200 to-zinc-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-100/50 to-transparent"></div>
       </div>
 
-      {/* Hopeful Background (Dawn/Light) */}
+      {/* Hopeful Background (Warm/Dawn) */}
       <div 
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${mood === 'hopeful' ? 'opacity-100' : 'opacity-0'}`}
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?q=80&w=2070&auto=format&fit=crop')` }}
+        className={`absolute inset-0 transition-opacity duration-[2000ms] ${mood === 'hopeful' ? 'opacity-100' : 'opacity-0'}`}
       >
-        {/* Warm light overlay */}
-        <div className="absolute inset-0 bg-amber-50/20 backdrop-blur-[1px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-200 via-orange-100 to-yellow-100"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-amber-50/60 to-transparent"></div>
       </div>
     </div>
   );
